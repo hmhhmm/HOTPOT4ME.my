@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOTPOT4ME.my — Solo Hotpot, Your Way</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --broth:#ED6A2C;        /* primary orange */
+    --broth-deep:#C9501A;
+    --mala:#D7382B;         /* spicy red accent */
+    --ink:#1B1A18;          /* near-black text */
+    --charcoal:#16191F;     /* dark sections */
+    --paper:#FBF6EF;        /* warm cream bg */
+    --steam:#EFE7DB;        /* soft neutral */
+    --line:#E4DACB;         /* hairline */
+    --herb:#2E7D52;         /* halal / fresh green */
+    --gold:#E9B949;
+    --card:#FFFFFF;
+    --muted:#7C7468;
+    --shadow:0 10px 30px rgba(27,26,24,.08);
+    --shadow-lg:0 24px 60px rgba(27,26,24,.16);
+    --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  h1,h2,h3,h4,.display{font-family:'Archivo',sans-serif;letter-spacing:-.02em;line-height:1.02}
+  .mono{font-family:'Space Mono',monospace}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  img{max-width:100%}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  .accent{color:var(--broth)}
+
+  /* ---------- promo bar ---------- */
+  .promo{background:var(--charcoal);color:#F5EFE6;font-size:13px;text-align:center;padding:8px 16px;font-weight:500}
+  .promo b{color:var(--broth)}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:50;background:rgba(251,246,239,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{font-family:'Archivo';font-weight:900;font-size:23px;letter-spacing:-.04em}
+  .logo .num{color:var(--broth)}
+  .logo .my{font-weight:600;font-size:16px;color:var(--muted)}
+  .nav-links{display:flex;gap:30px;font-weight:600;font-size:15px}
+  .nav-links a{position:relative;padding:4px 0;color:#3a352e}
+  .nav-links a:hover{color:var(--broth)}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;border-radius:999px;padding:11px 22px;font-size:15px;transition:.18s;white-space:nowrap}
+  .btn-primary{background:var(--broth);color:#fff;box-shadow:0 6px 18px rgba(237,106,44,.35)}
+  .btn-primary:hover{background:var(--broth-deep);transform:translateY(-1px)}
+  .btn-ghost{color:#3a352e;font-weight:600}
+  .btn-ghost:hover{color:var(--broth)}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-dark:hover{background:#000}
+  .btn-lg{padding:15px 30px;font-size:16px}
+  .burger{display:none}
+  /* mobile dropdown menu */
+  .mobile-menu{display:none;flex-direction:column;gap:2px;padding:10px 24px 18px;border-top:1px solid var(--line);background:var(--paper)}
+  .mobile-menu.open{display:flex;animation:fade .25s}
+  .mobile-menu a,.mobile-menu button{text-align:left;font-weight:700;font-size:16px;padding:13px 4px;color:#3a352e;border-bottom:1px solid var(--line)}
+  .mobile-menu a:hover,.mobile-menu button:hover{color:var(--broth)}
+  .mobile-menu .mm-login{border-bottom:none;color:var(--ink)}
+  .mobile-menu .mm-cta{border-bottom:none;background:var(--broth);color:#fff;border-radius:999px;text-align:center;margin-top:8px;padding:14px}
+  /* anchor offset under sticky nav */
+  section[id],header[id]{scroll-margin-top:78px}
+  /* login fields */
+  .modal-b label{display:block;font-weight:600;font-size:13px;margin-bottom:6px;color:#3a352e}
+  .modal-b input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px;font-family:inherit;font-size:15px;margin-bottom:14px}
+  .modal-b input:focus{outline:none;border-color:var(--broth);box-shadow:0 0 0 3px rgba(237,106,44,.15)}
+  .auth-tabs{display:flex;gap:6px;background:var(--steam);border-radius:11px;padding:4px;margin-bottom:18px}
+  .auth-tabs button{flex:1;padding:9px;border-radius:8px;font-weight:700;font-size:14px;color:#6a635a}
+  .auth-tabs button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:60px 0 50px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--broth);margin-bottom:20px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--broth);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .hero h1{font-size:clamp(44px,6.4vw,82px);font-weight:900;text-transform:uppercase}
+  .hero h1 .line2{color:var(--broth)}
+  .hero p.sub{font-size:19px;color:#4a443c;max-width:480px;margin:22px 0 14px}
+  .loc{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink);font-size:15px;margin-bottom:28px}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:26px}
+  .chips{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow)}
+  .chip.green{color:var(--herb)}
+
+  /* hero pot visual */
+  .pot-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:440px}
+  .pot-glow{position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(237,106,44,.22),transparent 65%);filter:blur(10px)}
+  .pot{position:relative;width:330px;height:330px;border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 38%, #F4A04E 0 30%, #ED6A2C 31% 49%, #D7382B 50% 100%);
+    box-shadow:inset 0 -22px 40px rgba(120,20,10,.45), inset 0 14px 30px rgba(255,220,160,.5), 0 30px 60px rgba(180,60,20,.3);
+    border:14px solid #C9C4BB;outline:5px solid #9a958c;display:flex;align-items:center;justify-content:center}
+  .pot::before{content:"";position:absolute;left:-13%;top:46%;width:30px;height:46px;border:13px solid #C9C4BB;border-radius:0 0 0 16px;border-top:none;border-right:none}
+  .pot::after{content:"";position:absolute;right:-13%;top:46%;width:30px;height:46px;border:13px solid #C9C4BB;border-radius:0 0 16px 0;border-top:none;border-left:none}
+  .divider{position:absolute;width:7px;height:100%;background:#C9C4BB;top:0;left:50%;transform:translateX(-50%);border-radius:4px;z-index:3}
+  .bub{position:absolute;border-radius:50%;background:rgba(255,236,200,.85);animation:rise 3s infinite ease-in}
+  @keyframes rise{0%{transform:translateY(20px) scale(.4);opacity:0}30%{opacity:.9}100%{transform:translateY(-90px) scale(1);opacity:0}}
+  .float-ing{position:absolute;font-size:30px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));animation:bob 4s infinite ease-in-out}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-9px) rotate(4deg)}}
+  .steam{position:absolute;top:8px;width:11px;height:70px;background:linear-gradient(to top,rgba(255,255,255,.7),transparent);border-radius:50%;filter:blur(5px);animation:steam 3.5s infinite}
+  @keyframes steam{0%{opacity:0;transform:translateY(20px) scaleX(1)}40%{opacity:.7}100%{opacity:0;transform:translateY(-50px) scaleX(1.8)}}
+  .gauge{position:absolute;bottom:6px;right:-6px;background:var(--charcoal);color:#fff;border-radius:14px;padding:11px 15px;box-shadow:var(--shadow-lg);text-align:left;z-index:5}
+  .gauge .lab{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9aa3ad}
+  .gauge .val{font-family:'Space Mono';font-weight:700;font-size:22px}
+  .gauge .val b{color:var(--broth)}
+  .gauge .smart{font-size:10px;color:var(--herb);font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
+  .gauge .smart::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--herb);box-shadow:0 0 0 0 rgba(46,125,82,.5);animation:pulse 1.6s infinite}
+
+  /* ---------- stat strip ---------- */
+  .stats{background:var(--charcoal);color:#fff;padding:34px 0}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+  .stat .n{font-family:'Archivo';font-weight:900;font-size:40px;color:var(--broth)}
+  .stat .l{font-size:13.5px;color:#bcb6ad;margin-top:2px}
+  .stat .sub{font-size:11px;color:#7d7870;margin-top:3px}
+
+  /* ---------- section base ---------- */
+  section{position:relative}
+  .sec-pad{padding:80px 0}
+  .sec-head{max-width:680px;margin-bottom:46px}
+  .sec-eyebrow{font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--broth);margin-bottom:14px}
+  .sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800}
+  .sec-head p{color:#5a544b;font-size:17px;margin-top:14px}
+
+  /* value props */
+  .vp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .vp{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow);transition:.2s}
+  .vp:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .vp .ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;font-size:25px;background:#FBEBDF;margin-bottom:16px}
+  .vp h3{font-size:19px;font-weight:800;margin-bottom:8px}
+  .vp p{font-size:14.5px;color:#6a635a}
+
+  /* innovation / AI */
+  .innov{background:var(--charcoal);color:#fff}
+  .innov .sec-head h2{color:#fff}
+  .innov .sec-head p{color:#b7b1a7}
+  .innov .sec-eyebrow{color:var(--broth)}
+  .ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .ai-card{background:#1F232B;border:1px solid #2c313b;border-radius:var(--r);padding:30px;position:relative;overflow:hidden}
+  .ai-card .badge{position:absolute;top:18px;right:18px;font-size:10px;font-weight:800;letter-spacing:.1em;background:rgba(237,106,44,.15);color:var(--broth);padding:5px 10px;border-radius:999px}
+  .ai-card .ic{font-size:34px;margin-bottom:16px}
+  .ai-card h3{font-size:21px;font-weight:800;margin-bottom:10px}
+  .ai-card p{color:#aaa49a;font-size:14.5px}
+  .ai-card .feat{margin-top:16px;font-size:13px;color:#cfc9bf;border-top:1px solid #2c313b;padding-top:14px}
+  .ai-card .feat b{color:var(--herb)}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .step{padding:24px;border-left:2px dashed var(--line);position:relative}
+  .step:first-child{border-left:none}
+  .step .no{font-family:'Space Mono';font-weight:700;color:var(--broth);font-size:14px;margin-bottom:10px}
+  .step .se{font-size:38px;margin-bottom:10px}
+  .step h4{font-size:18px;font-weight:800;margin-bottom:6px}
+  .step p{font-size:14px;color:#6a635a}
+
+  /* ---------- ORDER ---------- */
+  .order{background:linear-gradient(180deg,#fff,var(--paper))}
+  .order-grid{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+  .panel-h{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .panel-h .step-no{font-family:'Space Mono';font-weight:700;font-size:13px;color:#fff;background:var(--broth);width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none}
+  .panel-h h3{font-size:20px;font-weight:800}
+  .panel-h .req{color:var(--mala);font-size:14px}
+  .panel .hint{font-size:13.5px;color:var(--muted);margin-bottom:18px}
+
+  /* table select */
+  .tables{display:flex;gap:9px;flex-wrap:wrap}
+  .tbl{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:11px 0;width:78px;text-align:center;font-weight:700;font-size:14px;transition:.15s}
+  .tbl:hover{border-color:var(--broth)}
+  .tbl.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tbl .t{font-size:10px;letter-spacing:.1em;color:#a39c92;display:block;font-weight:600}
+  .tbl.on .t{color:#b9b3a8}
+
+  /* AI genie */
+  .genie{background:linear-gradient(135deg,#1F232B,#15181d);color:#fff;border:1px solid #2c313b}
+  .genie h3{color:#fff}
+  .genie .panel-h .step-no{background:linear-gradient(135deg,var(--broth),var(--mala))}
+  .genie .hint{color:#a9a39a}
+  .tag-row{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+  .tag{border:1.5px solid #3a4049;background:#222730;color:#d8d2c8;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+  .tag:hover{border-color:var(--broth)}
+  .tag.on{background:var(--broth);border-color:var(--broth);color:#fff}
+  .tag.locked{background:rgba(46,125,82,.18);border-color:var(--herb);color:#7fd3a3;cursor:default}
+  .genie-out{margin-top:16px;background:#222730;border:1px solid #333a44;border-radius:12px;padding:16px;font-size:14px;display:none}
+  .genie-out.show{display:block;animation:fade .4s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .genie-out .note{color:var(--gold);font-style:italic;margin-bottom:10px;display:flex;gap:9px}
+  .genie-out .picks{color:#cfc9bf;font-size:13px;line-height:1.7}
+  .genie-out .picks b{color:#fff}
+  .spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.25);border-top-color:var(--broth);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* option grids */
+  .opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:.15s;text-align:left}
+  .opt:hover{border-color:var(--broth);background:#fffaf6}
+  .opt.on{border-color:var(--broth);background:#FFF1E7;box-shadow:0 0 0 2px rgba(237,106,44,.18)}
+  .opt .nm{font-weight:600;font-size:14.5px}
+  .opt .pr{font-family:'Space Mono';font-size:12.5px;color:var(--broth);font-weight:700;white-space:nowrap}
+  .opt .pr.free{color:var(--herb)}
+  .opt .em{font-size:17px;margin-right:2px}
+
+  /* set meals */
+  .sets{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:13px}
+  .set{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:18px;cursor:pointer;transition:.15s;position:relative}
+  .set:hover{border-color:var(--broth)}
+  .set.on{border-color:var(--broth);background:#FFF1E7;box-shadow:0 0 0 2px rgba(237,106,44,.18)}
+  .set .tag2{position:absolute;top:-9px;right:14px;font-size:10px;font-weight:800;letter-spacing:.08em;background:var(--mala);color:#fff;padding:3px 9px;border-radius:999px}
+  .set .tag2.pop{background:var(--herb)}
+  .set h4{font-size:16.5px;font-weight:800;margin-bottom:4px}
+  .set .pr{font-family:'Space Mono';font-weight:700;color:var(--broth);font-size:18px;margin-bottom:8px}
+  .set .pr small{color:var(--muted);font-size:11px;font-weight:400}
+  .set .desc{font-size:13px;color:#6a635a}
+
+  /* qty stepper */
+  .step-item{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:11px 13px}
+  .step-item.has{border-color:var(--broth);background:#fffaf6}
+  .step-item .meta{min-width:0}
+  .step-item .nm{font-weight:600;font-size:14.5px}
+  .step-item .pr{font-family:'Space Mono';font-size:12px;color:var(--broth);font-weight:700}
+  .step-item .pr.free{color:var(--herb)}
+  .stepper{display:flex;align-items:center;gap:0;flex:none;border:1.5px solid var(--line);border-radius:9px;overflow:hidden}
+  .stepper button{width:30px;height:30px;font-size:17px;font-weight:700;color:var(--broth);background:#fff;display:grid;place-items:center}
+  .stepper button:hover{background:#FFF1E7}
+  .stepper button:disabled{color:#d2ccc2;cursor:not-allowed}
+  .stepper .q{width:30px;text-align:center;font-family:'Space Mono';font-weight:700;font-size:14px}
+  .grid-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:11px}
+
+  textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px;font-family:inherit;font-size:14.5px;resize:vertical;min-height:74px}
+  textarea:focus{outline:none;border-color:var(--broth);box-shadow:0 0 0 3px rgba(237,106,44,.15)}
+
+  /* ---------- summary rail ---------- */
+  .rail{position:sticky;top:84px}
+  .summary{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-lg);overflow:hidden}
+  .sum-pot{background:var(--charcoal);color:#fff;padding:20px;position:relative;overflow:hidden}
+  .sum-pot .ttl{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#9aa3ad;font-weight:700}
+  .mini-pot{height:96px;margin:10px 0 6px;display:flex;align-items:center;justify-content:center;position:relative}
+  .mp-bowl{width:170px;height:74px;border-radius:0 0 90px 90px;background:linear-gradient(180deg,#ED6A2C,#D7382B);border:5px solid #C9C4BB;border-top:6px solid #b9b3a8;position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-content:flex-start;gap:2px;padding:6px 10px}
+  .mp-ing{font-size:15px;animation:bob 3.5s infinite ease-in-out}
+  .mp-empty{color:#857f76;font-size:12px;position:absolute;top:30px;left:0;right:0;text-align:center}
+  /* smart temp control */
+  .temp{padding:16px 20px;border-bottom:1px solid var(--line)}
+  .temp .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+  .temp .row .lab{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .temp .row .lab .ai{font-size:9px;background:var(--herb);color:#fff;padding:2px 6px;border-radius:999px;letter-spacing:.05em}
+  .temp .tval{font-family:'Space Mono';font-weight:700;font-size:16px;color:var(--mala)}
+  .temp-btns{display:flex;gap:6px}
+  .tb{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:8px 4px;font-size:11.5px;font-weight:700;color:#6a635a;transition:.15s}
+  .tb.on{background:var(--mala);color:#fff;border-color:var(--mala)}
+  .tb small{display:block;font-family:'Space Mono';font-size:10px;font-weight:400;opacity:.8}
+
+  .nutri{padding:16px 20px;border-bottom:1px solid var(--line)}
+  .nutri .hd{display:flex;justify-content:space-between;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .nutri .hd .cal{color:var(--ink);font-family:'Space Mono'}
+  .nutri .hd .cal b{color:var(--broth);font-size:15px}
+  .macro{margin-bottom:9px}
+  .macro .ml{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+  .macro .ml .v{font-family:'Space Mono';font-weight:700}
+  .bar{height:6px;background:#EEE7DC;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:99px;transition:width .4s}
+  .bar.p i{background:#4F8DDA}.bar.c i{background:var(--gold)}.bar.f i{background:var(--broth)}.bar.s i{background:var(--mala)}
+
+  .lines{padding:16px 20px;max-height:200px;overflow-y:auto}
+  .lines .empty{color:var(--muted);font-size:13.5px;text-align:center;padding:18px 0}
+  .li{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:5px 0}
+  .li .ln{color:#3a352e}
+  .li .ln b{color:var(--broth);font-family:'Space Mono';font-size:12px;margin-right:4px}
+  .li .lp{font-family:'Space Mono';font-weight:700;white-space:nowrap}
+
+  .totals{padding:16px 20px;border-top:1px solid var(--line);background:#fffaf6}
+  .tt{display:flex;justify-content:space-between;font-size:13.5px;color:#5a544b;margin-bottom:6px}
+  .tt.grand{font-size:20px;font-weight:800;color:var(--ink);font-family:'Archivo';margin-top:8px;padding-top:10px;border-top:1px dashed var(--line)}
+  .tt.grand .mono{color:var(--broth)}
+  .checkout{width:100%;margin-top:14px;justify-content:center}
+  .checkout:disabled{background:#e7ddd0;color:#a99f92;box-shadow:none;cursor:not-allowed;transform:none}
+  .save{font-size:12px;color:var(--herb);text-align:center;margin-top:9px;font-weight:600}
+
+  /* ---------- membership ---------- */
+  .member{background:var(--broth);color:#fff}
+  .member-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  .member h2{font-size:clamp(28px,4vw,44px);font-weight:900;text-transform:uppercase;margin-bottom:14px}
+  .member p{font-size:17px;color:#ffe6d6;max-width:440px;margin-bottom:24px}
+  .perks{display:grid;gap:11px}
+  .perk{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.12);border-radius:12px;padding:14px 16px}
+  .perk .pi{font-size:22px;flex:none}
+  .perk b{display:block;font-size:15px}
+  .perk span{font-size:13px;color:#ffdcc7}
+  .price-card{background:#fff;color:var(--ink);border-radius:22px;padding:34px;box-shadow:var(--shadow-lg);text-align:center}
+  .price-card .tier{font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--broth);font-size:13px}
+  .price-card .big{font-family:'Archivo';font-weight:900;font-size:62px;margin:6px 0}
+  .price-card .big small{font-size:18px;color:var(--muted);font-weight:600}
+  .price-card ul{list-style:none;text-align:left;margin:20px 0;display:grid;gap:10px}
+  .price-card li{font-size:14.5px;display:flex;gap:9px}
+  .price-card li::before{content:"✓";color:var(--herb);font-weight:800}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--charcoal);color:#cfc9bf;padding:54px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:34px;margin-bottom:34px}
+  footer .logo{color:#fff;font-size:24px}
+  footer p{font-size:14px;color:#928c83;margin-top:12px;max-width:300px}
+  .foot-col h4{color:#fff;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .foot-col a{display:block;font-size:14px;margin-bottom:9px;color:#aaa49a}
+  .foot-col a:hover{color:var(--broth)}
+  .foot-bot{border-top:1px solid #2a2e36;padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:#7d7870}
+
+  /* ---------- modal / toast ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(20,18,16,.6);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+  .overlay.show{display:flex}
+  .modal{background:#fff;border-radius:20px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:pop .3s}
+  @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+  .modal-h{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .modal-h h3{font-size:21px;font-weight:800}
+  .modal-h .x{font-size:24px;color:var(--muted);width:34px;height:34px;border-radius:9px}
+  .modal-h .x:hover{background:var(--steam)}
+  .modal-b{padding:24px}
+  .pay{display:flex;align-items:center;gap:13px;border:1.5px solid var(--line);border-radius:13px;padding:15px;margin-bottom:11px;transition:.15s;width:100%;text-align:left}
+  .pay:hover{border-color:var(--broth)}
+  .pay.on{border-color:var(--broth);background:#FFF1E7;box-shadow:0 0 0 2px rgba(237,106,44,.18)}
+  .pay .pic{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;font-size:20px;flex:none}
+  .pay .pt{font-weight:700;font-size:15px}
+  .pay .ps{font-size:12.5px;color:var(--muted)}
+  .grab{background:#00B14F;color:#fff;font-weight:800;font-size:13px;font-family:Archivo}
+  .order-final{background:var(--paper);border-radius:13px;padding:16px;margin-bottom:18px;font-size:14px}
+  .order-final .of{display:flex;justify-content:space-between;margin-bottom:6px}
+  .order-final .of b{font-family:'Space Mono'}
+  .order-final .grand{font-weight:800;font-size:18px;border-top:1px dashed var(--line);padding-top:8px;margin-top:6px}
+
+  /* status screen */
+  .status-wrap{text-align:center;padding:14px 0}
+  .status-pot{font-size:64px;animation:bob 2.5s infinite ease-in-out;margin-bottom:8px}
+  .status-wrap h3{font-size:26px;font-weight:900;text-transform:uppercase}
+  .status-wrap .est{color:var(--broth);font-family:'Space Mono';font-weight:700;font-size:15px;margin:4px 0 18px}
+  .track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:20px 0}
+  .tk{text-align:center}
+  .tk .d{width:34px;height:34px;border-radius:50%;background:var(--steam);display:grid;place-items:center;margin:0 auto 7px;font-size:16px;border:2px solid var(--line)}
+  .tk.done .d{background:var(--herb);border-color:var(--herb);color:#fff}
+  .tk.active .d{background:var(--broth);border-color:var(--broth);color:#fff;animation:pulse 1.4s infinite}
+  .tk .l{font-size:11px;color:var(--muted);font-weight:600}
+  .tk.done .l,.tk.active .l{color:var(--ink)}
+  .prog{height:8px;background:var(--steam);border-radius:99px;overflow:hidden;margin:16px 0}
+  .prog i{display:block;height:100%;background:linear-gradient(90deg,var(--broth),var(--mala));border-radius:99px;width:0;transition:width .8s}
+  .status-meta{background:var(--paper);border-radius:12px;padding:14px;font-size:13.5px;color:#5a544b;text-align:left;margin-top:6px}
+  .status-meta .sm{display:flex;justify-content:space-between;margin-bottom:5px}
+  .status-meta .sm b{color:var(--ink);font-family:'Space Mono'}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:14px 22px;border-radius:13px;font-weight:600;font-size:14.5px;z-index:200;box-shadow:var(--shadow-lg);transition:.4s;display:flex;align-items:center;gap:10px;max-width:90vw}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast .te{font-size:18px}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:980px){
+    .hero-grid{grid-template-columns:1fr;gap:30px}
+    .pot-stage{min-height:360px}
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:30px 16px}
+    .vp-grid,.ai-grid{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .step{border-left:none;border-top:2px dashed var(--line);padding:20px 14px}
+    .step:first-child,.step:nth-child(2){border-top:none}
+    .order-grid{grid-template-columns:1fr}
+    .rail{position:static}
+    .member-grid,.foot-grid{grid-template-columns:1fr}
+    .foot-grid{gap:26px}
+  }
+  @media(max-width:900px){
+    .nav-links{display:none}
+    .nav-cta .btn-ghost{display:none}
+    .burger{display:grid;place-items:center;width:42px;height:42px;border-radius:10px;font-size:22px}
+  }
+  @media(max-width:640px){
+    .wrap{padding:0 18px}
+    .vp-grid,.ai-grid,.stats-grid{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr}
+    .step{border-top:2px dashed var(--line)!important}
+    .step:first-child{border-top:none!important}
+    .hero{padding:40px 0 30px}
+    .sec-pad{padding:54px 0}
+  }
+  @media(max-width:430px){
+    .nav-cta .btn-primary{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- promo -->
+<div class="promo">🎉 Now open in <b>Subang Jaya</b> · Free garlic paste &amp; 5 dipping sauces on every pot · Members get a free lunch on their birthday</div>
+
+<!-- nav -->
+<nav>
+  <div class="wrap nav-in">
+    <a href="#top" class="logo">HOTPOT<span class="num">4</span>ME<span class="my">.my</span></a>
+    <div class="nav-links">
+      <a href="#why">Why us</a>
+      <a href="#smart">Smart pot &amp; AI</a>
+      <a href="#how">How it works</a>
+      <a href="#order">Menu</a>
+      <a href="#member">Membership</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" onclick="openLogin()">Log in</button>
+      <a href="#order" class="btn btn-primary">Order now</a>
+      <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#why">Why us</a>
+    <a href="#smart">Smart pot &amp; AI</a>
+    <a href="#how">How it works</a>
+    <a href="#order">Menu</a>
+    <a href="#member">Membership</a>
+    <button class="mm-login" onclick="closeMenu();openLogin()">Log in</button>
+    <a href="#order" class="mm-cta">Order now</a>
+  </div>
+</nav>
+
+<!-- hero -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> Halal-certified · Solo-friendly · AI-powered</span>
+      <h1>Solo hotpot,<br><span class="line2">your way.</span></h1>
+      <p class="sub">One clean pot per person. Pick your broth, build your bowl, let our AI tune it to your taste — served bubbling in minutes.</p>
+      <div class="loc">📍 SS15, Subang Jaya, Selangor — open daily 11am–11pm</div>
+      <div class="hero-ctas">
+        <a href="#order" class="btn btn-primary btn-lg">Build your own pot →</a>
+        <a href="#smart" class="btn btn-dark btn-lg">Meet the smart pot</a>
+      </div>
+      <div class="chips">
+        <span class="chip green">✓ JAKIM Halal</span>
+        <span class="chip">🦠 No shared pot</span>
+        <span class="chip">⚡ Under 10 min</span>
+        <span class="chip">💸 Sets from RM18.90</span>
+      </div>
+    </div>
+    <div class="pot-stage">
+      <div class="pot-glow"></div>
+      <div class="pot" id="heroPot">
+        <div class="divider"></div>
+        <span class="float-ing" style="top:24%;left:26%">🦐</span>
+        <span class="float-ing" style="top:30%;left:60%;animation-delay:.6s">🍄</span>
+        <span class="float-ing" style="top:58%;left:30%;animation-delay:1.1s">🥬</span>
+        <span class="float-ing" style="top:60%;left:62%;animation-delay:1.6s">🥩</span>
+        <span class="float-ing" style="top:44%;left:45%;animation-delay:.3s">🍜</span>
+        <span class="bub" style="width:14px;height:14px;left:34%;bottom:34%"></span>
+        <span class="bub" style="width:9px;height:9px;left:62%;bottom:40%;animation-delay:.8s"></span>
+        <span class="bub" style="width:11px;height:11px;left:48%;bottom:30%;animation-delay:1.5s"></span>
+        <span class="steam" style="left:38%"></span>
+        <span class="steam" style="left:55%;animation-delay:1.2s"></span>
+      </div>
+      <div class="gauge">
+        <div class="lab">Smart pot · Table 7</div>
+        <div class="val"><b id="heroTemp">98</b>°C</div>
+        <div class="smart">Auto-simmer locked</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- stats -->
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat"><div class="n">76.2%</div><div class="l">want to try a personal hotpot</div><div class="sub">from our 63-person survey</div></div>
+    <div class="stat"><div class="n">50,000+</div><div class="l">students nearby</div><div class="sub">Taylor's · Sunway · Monash · INTI</div></div>
+    <div class="stat"><div class="n">63.5%</div><div class="l">name hygiene a top concern</div><div class="sub">solved by one pot each</div></div>
+    <div class="stat"><div class="n">&lt;RM23</div><div class="l">average solo set</div><div class="sub">built for student budgets</div></div>
+  </div>
+</section>
+
+<!-- why -->
+<section class="sec-pad" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Why HOTPOT4ME</div>
+      <h2>Everything wrong with group hotpot, fixed.</h2>
+      <p>Traditional steamboat means shared broth, mismatched cravings and waiting on the table. We rebuilt it around one person — you.</p>
+    </div>
+    <div class="vp-grid">
+      <div class="vp"><div class="ic">🍲</div><h3>Your own pot</h3><p>A private mini-hotpot per diner. No shared utensils, no cross-contamination — the post-COVID hygiene worry, gone.</p></div>
+      <div class="vp"><div class="ic">🎛️</div><h3>Full customization</h3><p>Choose up to two broths, then mix proteins, veg, carbs and sauces. Spicy, vegetarian, low-sodium — entirely your call.</p></div>
+      <div class="vp"><div class="ic">☪️</div><h3>Halal &amp; inclusive</h3><p>Fully JAKIM-halal so Muslim and non-Muslim friends finally share the same table without compromise.</p></div>
+      <div class="vp"><div class="ic">⚡</div><h3>Quick &amp; affordable</h3><p>QR-order at your seat, skip the queue, pay only for what you eat. Sets from RM18.90, served in minutes.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- innovation / AI -->
+<section class="sec-pad innov" id="smart">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">The boundary-crossing layer</div>
+      <h2>A hotpot that thinks with you.</h2>
+      <p>We didn't just digitise the menu. Three connected technologies turn a meal into a guided, data-aware experience.</p>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <span class="badge">AI</span>
+        <div class="ic">🤖</div>
+        <h3>AI Pot Genie</h3>
+        <p>Tell it how you feel — “spicy &amp; high-protein” or “light, low-sodium, halal” — and it designs a complete pot from our live menu in seconds.</p>
+        <div class="feat"><b>Removes:</b> decision fatigue &amp; long menu scrolling at the table.</div>
+      </div>
+      <div class="ai-card">
+        <span class="badge">IoT</span>
+        <div class="ic">🌡️</div>
+        <h3>Smart temperature pots</h3>
+        <p>Each induction pot self-regulates — gentle simmer, rolling boil or keep-warm — so beef never overcooks and broth never boils dry.</p>
+        <div class="feat"><b>Removes:</b> guesswork, scorched food &amp; safety risk.</div>
+      </div>
+      <div class="ai-card">
+        <span class="badge">DATA</span>
+        <div class="ic">📊</div>
+        <h3>Live nutrition tracking</h3>
+        <p>As you build, the app totals calories, protein, carbs, fat and sodium per pot — so health-conscious diners eat with full transparency.</p>
+        <div class="feat"><b>Removes:</b> the blind-eating problem for fitness &amp; diet goals.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- how -->
+<section class="sec-pad" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">From seat to slurp</div>
+      <h2>How it works</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="no">STEP 01</div><div class="se">📱</div><h4>Scan &amp; sit</h4><p>Scan the QR at your table — no app download, no waiting for staff.</p></div>
+      <div class="step"><div class="no">STEP 02</div><div class="se">🧠</div><h4>Build or ask AI</h4><p>Design your pot by hand or let the Pot Genie suggest one for your taste.</p></div>
+      <div class="step"><div class="no">STEP 03</div><div class="se">🔥</div><h4>Smart pot heats</h4><p>Your induction pot pre-heats to the perfect temperature as the kitchen plates fresh ingredients.</p></div>
+      <div class="step"><div class="no">STEP 04</div><div class="se">🥢</div><h4>Cook &amp; enjoy</h4><p>Served in minutes. Cook at your own pace, your own pot, your own way.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER -->
+<section class="sec-pad order" id="order">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Order · Table service</div>
+      <h2>Build your pot</h2>
+      <p>This is the live ordering screen diners see after scanning their table QR. Everything updates your bowl, nutrition and bill in real time.</p>
+    </div>
+
+    <div class="order-grid">
+      <!-- LEFT: form -->
+      <div>
+        <!-- table -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">1</span><h3>Table number</h3><span class="req">*</span></div>
+          <p class="hint">Tap your table so the kitchen and smart pot know where to serve.</p>
+          <div class="tables" id="tables"></div>
+        </div>
+
+        <!-- AI genie -->
+        <div class="panel genie">
+          <div class="panel-h"><span class="step-no">✦</span><h3>AI Pot Genie</h3></div>
+          <p class="hint">Pick how you want to eat — the Genie builds a full pot from today's menu and fills it in below.</p>
+          <div class="tag-row" id="tags">
+            <span class="tag locked">☪️ Halal (always on)</span>
+          </div>
+          <button class="btn btn-primary" id="genieBtn" onclick="runGenie()">✦ Generate my pot</button>
+          <div class="genie-out" id="genieOut"></div>
+        </div>
+
+        <!-- soup -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">2</span><h3>Choose soup base</h3><span class="req">*</span></div>
+          <p class="hint">Pick up to two — split-pot lets you enjoy two broths at once.</p>
+          <div class="opt-grid" id="soups"></div>
+        </div>
+
+        <!-- set -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">3</span><h3>Select set meal</h3><span class="req">*</span></div>
+          <p class="hint">Choose a ready bundle, or pick “Build your own” and add à la carte below.</p>
+          <div class="sets" id="sets"></div>
+        </div>
+
+        <!-- veg -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">4</span><h3>Vegetables</h3></div>
+          <p class="hint">Fresh daily · RM4.80 per 100g portion.</p>
+          <div class="grid-items" id="veg"></div>
+        </div>
+
+        <!-- meat -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">5</span><h3>Meat &amp; seafood</h3></div>
+          <p class="hint">Sliced to order.</p>
+          <div class="grid-items" id="meat"></div>
+        </div>
+
+        <!-- staple -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">6</span><h3>Staple food</h3></div>
+          <div class="grid-items" id="staple"></div>
+        </div>
+
+        <!-- drinks -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">7</span><h3>Drinks</h3></div>
+          <div class="grid-items" id="drinks"></div>
+        </div>
+
+        <!-- addons -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">8</span><h3>Sauces &amp; add-ons</h3></div>
+          <p class="hint">Dipping sauces are free — tap to add. Premium add-ons are charged.</p>
+          <div class="grid-items" id="addons"></div>
+        </div>
+
+        <!-- special -->
+        <div class="panel">
+          <div class="panel-h"><span class="step-no">9</span><h3>Special request</h3></div>
+          <p class="hint">Allergies or tweaks for the kitchen.</p>
+          <textarea id="special" placeholder="e.g. no onion, less spicy, extra napkins"></textarea>
+        </div>
+      </div>
+
+      <!-- RIGHT: summary rail -->
+      <div class="rail">
+        <div class="summary">
+          <div class="sum-pot">
+            <div class="ttl">Your pot · <span id="sumTable">no table yet</span></div>
+            <div class="mini-pot">
+              <div class="mp-bowl" id="miniPot"><span class="mp-empty">empty — start adding</span></div>
+            </div>
+          </div>
+
+          <!-- smart temp -->
+          <div class="temp">
+            <div class="row">
+              <span class="lab">🌡️ Smart pot <span class="ai">AUTO</span></span>
+              <span class="tval" id="tempVal">— °C</span>
+            </div>
+            <div class="temp-btns" id="tempBtns">
+              <button class="tb" data-t="75" onclick="setTemp(75,this)">Keep warm<small>75°C</small></button>
+              <button class="tb on" data-t="95" onclick="setTemp(95,this)">Simmer<small>95°C</small></button>
+              <button class="tb" data-t="100" onclick="setTemp(100,this)">Rolling boil<small>100°C</small></button>
+            </div>
+          </div>
+
+          <!-- nutrition -->
+          <div class="nutri">
+            <div class="hd"><span>Live nutrition</span><span class="cal"><b id="nCal">0</b> kcal</span></div>
+            <div class="macro"><div class="ml"><span>Protein</span><span class="v" id="nPv">0 g</span></div><div class="bar p"><i id="nP"></i></div></div>
+            <div class="macro"><div class="ml"><span>Carbs</span><span class="v" id="nCv">0 g</span></div><div class="bar c"><i id="nC"></i></div></div>
+            <div class="macro"><div class="ml"><span>Fat</span><span class="v" id="nFv">0 g</span></div><div class="bar f"><i id="nF"></i></div></div>
+            <div class="macro"><div class="ml"><span>Sodium</span><span class="v" id="nSv">0 mg</span></div><div class="bar s"><i id="nS"></i></div></div>
+          </div>
+
+          <!-- lines -->
+          <div class="lines" id="lines"><div class="empty">Your bowl is empty. Add a broth to begin.</div></div>
+
+          <!-- totals -->
+          <div class="totals">
+            <div class="tt"><span>Subtotal</span><span class="mono" id="tSub">RM0.00</span></div>
+            <div class="tt"><span>SST 6%</span><span class="mono" id="tTax">RM0.00</span></div>
+            <div class="tt grand"><span>Total</span><span class="mono" id="tGrand">RM0.00</span></div>
+            <button class="btn btn-primary checkout" id="checkoutBtn" onclick="openCheckout()" disabled>Review &amp; pay</button>
+            <div class="save">⚡ Order saved to Table — pay by app, no third-party fees</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- membership -->
+<section class="sec-pad member" id="member">
+  <div class="wrap member-grid">
+    <div>
+      <h2>Join the<br>4ME Club</h2>
+      <p>Regulars deserve more. One small monthly fee unlocks perks that pay for themselves in two visits.</p>
+      <div class="perks">
+        <div class="perk"><span class="pi">🎂</span><div><b>Birthday free lunch set</b><span>Our treat, once a year.</span></div></div>
+        <div class="perk"><span class="pi">⭐</span><div><b>Points on every pot</b><span>Redeem for premium meats &amp; upgrades.</span></div></div>
+        <div class="perk"><span class="pi">🎟️</span><div><b>Member Day discounts</b><span>Exclusive prices every week.</span></div></div>
+        <div class="perk"><span class="pi">⚡</span><div><b>Priority seating</b><span>Skip the wait at peak hours.</span></div></div>
+      </div>
+    </div>
+    <div class="price-card">
+      <div class="tier">4ME Club Membership</div>
+      <div class="big">RM7.99<small>/month</small></div>
+      <ul>
+        <li>Free lunch set on your birthday</li>
+        <li>Earn &amp; redeem reward points</li>
+        <li>Weekly Member Day prices</li>
+        <li>Priority reservations</li>
+        <li>10% off when you leave feedback</li>
+      </ul>
+      <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="toast('🎉','Welcome to the 4ME Club! (demo)')">Become a member</button>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo">HOTPOT<span style="color:var(--broth)">4</span>ME<span style="color:#928c83;font-weight:600;font-size:16px">.my</span></div>
+        <p>Malaysia's personal halal hotpot — clean, customizable and built for solo diners and students in Subang Jaya.</p>
+      </div>
+      <div class="foot-col"><h4>Explore</h4><a href="#why">Why us</a><a href="#smart">Smart pot &amp; AI</a><a href="#order">Menu</a><a href="#member">Membership</a></div>
+      <div class="foot-col"><h4>Visit</h4><a>SS15, Subang Jaya</a><a>Selangor, Malaysia</a><a>Open 11am – 11pm daily</a><a>@HotPot4Me.my</a></div>
+      <div class="foot-col"><h4>Follow the steam</h4><a>📸 Instagram · #SoloHotPot</a><a>🎵 TikTok · #SubangEats</a><a>📕 RedNote · @HotPot4Me</a><a>🗺️ Leave a Google review</a></div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2025 HOTPOT4ME.my · A Group 3 entrepreneurial venture prototype</span>
+      <span>Halal-certified · One pot, one person, your way.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- checkout modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast"><span class="te" id="toastE">✓</span><span id="toastM"></span></div>
+
+<script>
+/* ============ MENU DATA (name · price RM · emoji · nutrition[cal,protein,carb,fat,sodium]) ============ */
+const MENU = {
+  soups:[
+    {id:'tomato',  n:'Tomato Soup',              p:5, e:'🍅', nut:[90,2,14,3,700]},
+    {id:'laksa',   n:'Local Laksa Soup',         p:7, e:'🍜', nut:[220,5,16,14,1200]},
+    {id:'prawn',   n:'Prawn Soup',               p:7, e:'🦐', nut:[110,9,4,6,900]},
+    {id:'mushroom',n:'Mushroom Soup',            p:5, e:'🍄', nut:[70,3,8,3,650]},
+    {id:'tonic',   n:'Tonic Diet Chicken Soup',  p:5, e:'🐔', nut:[120,10,3,7,700]},
+    {id:'mala',    n:'Mala Spicy Soup',          p:5, e:'🌶️', nut:[180,3,8,15,1400]},
+    {id:'sour',    n:'Hot and Sour Soup',        p:5, e:'🥣', nut:[90,3,10,4,1000]},
+  ],
+  sets:[
+    {id:'byo',    n:'Build your own', p:0,     tag:'',          desc:'À la carte — add anything below and pay only for what you pick.', incl:[]},
+    {id:'student',n:'Student Lunch Set', p:18.90, tag:'BEST VALUE', tagc:'pop', desc:'Chicken slices, mixed veg, hand-made noodles + 1 broth. Built for the RM20 budget.', incl:['🐔','🥬','🍜']},
+    {id:'classic',n:'Classic Solo Set', p:22.90, tag:'', desc:'Prawn, broccoli, enoki, tofu, white rice — the all-rounder.', incl:['🦐','🥦','🍄','🍚']},
+    {id:'meat',   n:'Meat Lover Combo', p:24.15, tag:'', desc:'Sirloin beef, chicken, cabbage & spinach noodles for big appetites.', incl:['🥩','🐔','🥬','🍜']},
+    {id:'wagyu',  n:'Signature Wagyu Premium', p:32.80, tag:'PREMIUM', desc:'Wagyu-grade beef, scallop, king oyster mushroom & exclusive sauce.', incl:['🥩','🐚','🍄']},
+  ],
+  veg:[
+    {id:'lotus',n:'Lotus Root Slices',p:4.80,e:'🪷',nut:[70,2,16,0,30]},
+    {id:'potato',n:'Potato Slices',p:4.80,e:'🥔',nut:[80,2,18,0,20]},
+    {id:'broccoli',n:'Broccoli',p:4.80,e:'🥦',nut:[35,3,7,0,30]},
+    {id:'ftofu',n:'Frozen Tofu',p:4.80,e:'🧊',nut:[90,9,3,5,15]},
+    {id:'beancurd',n:'China Beancurd Skin',p:4.80,e:'🟡',nut:[130,13,4,7,20]},
+    {id:'kingoyster',n:'King Oyster Mushroom',p:4.80,e:'🍄',nut:[35,3,6,0,15]},
+    {id:'enoki',n:'Enoki Mushroom',p:4.80,e:'🍄',nut:[35,2,7,0,10]},
+    {id:'shiitake',n:'Shiitake Mushrooms',p:4.80,e:'🍄',nut:[35,2,7,0,15]},
+    {id:'cabbage',n:'Cabbage',p:4.80,e:'🥬',nut:[25,1,6,0,20]},
+    {id:'lettuce',n:'Green Carol Lettuce',p:4.80,e:'🥬',nut:[15,1,3,0,10]},
+    {id:'crown',n:'Crown Daisy (Tong Ho)',p:4.80,e:'🌿',nut:[20,2,3,0,120]},
+    {id:'bamboo',n:'Bamboo Shoots',p:4.80,e:'🎋',nut:[27,2,5,0,10]},
+  ],
+  meat:[
+    {id:'prawn',n:'Fresh Prawn',p:9.90,e:'🦐',nut:[85,18,1,1,300]},
+    {id:'scallop',n:'Scallop',p:9.90,e:'🐚',nut:[95,19,3,1,330]},
+    {id:'sirloin',n:'Sirloin Beef Slices',p:15.90,e:'🥩',nut:[250,20,0,19,75]},
+    {id:'chicken',n:'Chicken Slices',p:8.90,e:'🐔',nut:[160,24,0,7,90]},
+  ],
+  staple:[
+    {id:'spinachn',n:'Spinach Noodles',p:3.90,e:'🍜',nut:[210,7,42,1,300]},
+    {id:'handn',n:'Hand-made Noodles',p:3.90,e:'🍜',nut:[220,7,44,1,320]},
+    {id:'rice',n:'White Rice',p:2.00,e:'🍚',nut:[200,4,44,0,2]},
+    {id:'bread',n:'Bread',p:2.90,e:'🍞',nut:[150,5,28,2,250]},
+  ],
+  drinks:[
+    {id:'coke',n:'Coca-Cola',p:3.00,e:'🥤',nut:[140,0,39,0,10]},
+    {id:'100plus',n:'100 Plus',p:3.00,e:'🥤',nut:[90,0,24,0,55]},
+    {id:'soya',n:'Soya Bean Milk',p:3.50,e:'🥛',nut:[120,6,15,4,60]},
+    {id:'water',n:'Mineral Water',p:2.50,e:'💧',nut:[0,0,0,0,2]},
+    {id:'tea',n:'Tea',p:5.00,e:'🍵',nut:[2,0,0,0,5]},
+    {id:'sourplum',n:'Sour Plum Juice',p:4.90,e:'🧃',nut:[110,0,28,0,120]},
+  ],
+  addons:[
+    {id:'cheese',n:'Cheese Balls',p:2.90,e:'🧀',nut:[180,6,12,12,280]},
+    {id:'saucemix',n:'Sauce Mix',p:1.50,e:'🥄',nut:[60,1,3,5,600]},
+    {id:'garlic',n:'Garlic Paste',p:0,e:'🧄',nut:[30,1,2,2,200]},
+    {id:'chili',n:'Chopped Chili',p:0,e:'🌶️',nut:[10,0,1,0,150]},
+    {id:'scallion',n:'Scallion',p:0,e:'🧅',nut:[5,0,1,0,5]},
+    {id:'soy',n:'Soy Sauce',p:0,e:'🫙',nut:[10,1,1,0,900]},
+    {id:'vinegar',n:'Vinegar',p:0,e:'🫗',nut:[5,0,1,0,2]},
+    {id:'sesame',n:'Sesame Oil',p:0,e:'🛢️',nut:[40,0,0,5,0]},
+    {id:'peanut',n:'Crushed Peanuts',p:0,e:'🥜',nut:[50,2,2,4,30]},
+    {id:'coriander',n:'Coriander',p:0,e:'🌿',nut:[2,0,0,0,2]},
+  ]
+};
+
+/* ============ STATE ============ */
+const state = {
+  table:null,
+  soups:new Set(),       // max 2
+  set:null,              // set id
+  qty:{veg:{},meat:{},staple:{},drinks:{},addons:{}},
+  special:'',
+  temp:95,
+  payment:null,
+};
+
+/* targets for nutrition bars (rough daily-meal reference) */
+const TARGET={p:50,c:130,f:45,s:2300};
+
+/* ============ RENDER HELPERS ============ */
+function money(x){return 'RM'+x.toFixed(2)}
+function el(html){const d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild}
+
+/* tables */
+function renderTables(){
+  const c=document.getElementById('tables');c.innerHTML='';
+  for(let i=1;i<=10;i++){
+    const b=el(`<button class="tbl" data-n="${i}"><span class="t">TABLE</span>${i}</button>`);
+    b.onclick=()=>{state.table=i;document.querySelectorAll('.tbl').forEach(x=>x.classList.remove('on'));b.classList.add('on');update();};
+    c.appendChild(b);
+  }
+}
+
+/* soup chips */
+function renderSoups(){
+  const c=document.getElementById('soups');c.innerHTML='';
+  MENU.soups.forEach(s=>{
+    const b=el(`<button class="opt"><span class="nm"><span class="em">${s.e}</span>${s.n}</span><span class="pr">${money(s.p)}</span></button>`);
+    b.onclick=()=>{
+      if(state.soups.has(s.id)) state.soups.delete(s.id);
+      else{ if(state.soups.size>=2){toast('🍲','Up to two broths — split-pot max reached');return;} state.soups.add(s.id);}
+      b.classList.toggle('on',state.soups.has(s.id));update();
+    };
+    c.appendChild(b);
+  });
+}
+
+/* sets */
+function renderSets(){
+  const c=document.getElementById('sets');c.innerHTML='';
+  MENU.sets.forEach(s=>{
+    const tag=s.tag?`<span class="tag2 ${s.tagc||''}">${s.tag}</span>`:'';
+    const incl=s.incl.length?`<div style="font-size:18px;margin-bottom:6px">${s.incl.join(' ')}</div>`:'';
+    const price=s.p>0?`${money(s.p)} <small>fixed bundle</small>`:'<small>pay per item</small>';
+    const b=el(`<div class="set">${tag}${incl}<h4>${s.n}</h4><div class="pr">${price}</div><div class="desc">${s.desc}</div></div>`);
+    b.onclick=()=>{state.set=s.id;document.querySelectorAll('.set').forEach(x=>x.classList.remove('on'));b.classList.add('on');update();};
+    c.appendChild(b);
+  });
+}
+
+/* qty grids */
+function renderQty(cat,target){
+  const c=document.getElementById(target);c.innerHTML='';
+  MENU[cat].forEach(it=>{
+    const free=it.p===0;
+    const prc=free?'<span class="pr free">FREE</span>':`<span class="pr">${money(it.p)}</span>`;
+    const row=el(`<div class="step-item" data-id="${it.id}">
+      <div class="meta"><div class="nm"><span class="em">${it.e}</span> ${it.n}</div>${prc}</div>
+      <div class="stepper">
+        <button class="minus">−</button><span class="q">0</span><button class="plus">+</button>
+      </div></div>`);
+    const q=row.querySelector('.q'), minus=row.querySelector('.minus'), plus=row.querySelector('.plus');
+    const set=v=>{state.qty[cat][it.id]=v;q.textContent=v;minus.disabled=v<=0;row.classList.toggle('has',v>0);update();};
+    minus.disabled=true;
+    minus.onclick=()=>{const v=(state.qty[cat][it.id]||0);if(v>0)set(v-1);};
+    plus.onclick=()=>{const v=(state.qty[cat][it.id]||0);if(v<20)set(v+1);};
+    c.appendChild(row);
+  });
+}
+
+/* ============ COMPUTE + UPDATE ============ */
+function lineItems(){
+  const items=[];
+  state.soups.forEach(id=>{const s=MENU.soups.find(x=>x.id===id);items.push({n:s.n,q:1,p:s.p,nut:s.nut,e:s.e});});
+  if(state.set){const s=MENU.sets.find(x=>x.id===state.set);if(s.p>0)items.push({n:s.n,q:1,p:s.p,nut:[0,0,0,0,0],e:'🍱',set:true});}
+  ['veg','meat','staple','drinks','addons'].forEach(cat=>{
+    Object.entries(state.qty[cat]).forEach(([id,q])=>{
+      if(q>0){const it=MENU[cat].find(x=>x.id===id);items.push({n:it.n,q,p:it.p,nut:it.nut,e:it.e});}
+    });
+  });
+  return items;
+}
+function update(){
+  const items=lineItems();
+  // totals
+  let sub=0,nut=[0,0,0,0,0];
+  items.forEach(i=>{sub+=i.p*i.q;for(let k=0;k<5;k++)nut[k]+=(i.nut[k]||0)*i.q;});
+  const tax=sub*0.06, grand=sub+tax;
+  document.getElementById('tSub').textContent=money(sub);
+  document.getElementById('tTax').textContent=money(tax);
+  document.getElementById('tGrand').textContent=money(grand);
+
+  // nutrition
+  document.getElementById('nCal').textContent=Math.round(nut[0]);
+  const setBar=(idv,val,t)=>{document.getElementById(idv).style.width=Math.min(100,val/t*100)+'%';};
+  document.getElementById('nPv').textContent=Math.round(nut[1])+' g';setBar('nP',nut[1],TARGET.p);
+  document.getElementById('nCv').textContent=Math.round(nut[2])+' g';setBar('nC',nut[2],TARGET.c);
+  document.getElementById('nFv').textContent=Math.round(nut[3])+' g';setBar('nF',nut[3],TARGET.f);
+  document.getElementById('nSv').textContent=Math.round(nut[4])+' mg';setBar('nS',nut[4],TARGET.s);
+
+  // lines
+  const L=document.getElementById('lines');
+  if(items.length===0){L.innerHTML='<div class="empty">Your bowl is empty. Add a broth to begin.</div>';}
+  else{L.innerHTML=items.map(i=>`<div class="li"><span class="ln"><b>${i.q}×</b>${i.n}</span><span class="lp">${i.p===0?'free':money(i.p*i.q)}</span></div>`).join('');}
+
+  // mini pot
+  const mp=document.getElementById('miniPot');
+  const emojis=[];state.soups.forEach(id=>emojis.push(MENU.soups.find(x=>x.id===id).e));
+  items.filter(i=>!i.set).forEach(i=>{for(let k=0;k<Math.min(i.q,3);k++)emojis.push(i.e);});
+  if(emojis.length<=1){mp.innerHTML='<span class="mp-empty">empty — start adding</span>';}
+  else{mp.innerHTML=emojis.slice(0,18).map((e,i)=>`<span class="mp-ing" style="animation-delay:${i*0.15}s">${e}</span>`).join('');}
+
+  // table label
+  document.getElementById('sumTable').textContent=state.table?('Table '+state.table):'no table yet';
+  document.getElementById('tempVal').textContent=state.temp+' °C';
+
+  // checkout enable
+  const ok=state.table&&state.soups.size>0&&state.set;
+  document.getElementById('checkoutBtn').disabled=!ok;
+}
+
+/* smart temp */
+function setTemp(t,btn){
+  state.temp=t;
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  document.getElementById('tempVal').textContent=t+' °C';
+  const names={75:'Keep warm',95:'Gentle simmer',100:'Rolling boil'};
+  toast('🌡️','Smart pot set to '+names[t]+' ('+t+'°C)');
+}
+
+/* ============ AI POT GENIE ============ */
+const TAGS=[
+  {id:'spicy',label:'🌶️ Spicy'},
+  {id:'vegetarian',label:'🥬 Vegetarian'},
+  {id:'highprotein',label:'💪 High-protein'},
+  {id:'lowsodium',label:'🧂 Low-sodium'},
+  {id:'light',label:'🪶 Light / low-cal'},
+  {id:'budget',label:'💸 Under RM23'},
+  {id:'premium',label:'✨ Premium treat'},
+];
+const chosenTags=new Set();
+function renderTags(){
+  const c=document.getElementById('tags');
+  TAGS.forEach(t=>{
+    const b=el(`<button class="tag">${t.label}</button>`);
+    b.onclick=()=>{if(chosenTags.has(t.id)){chosenTags.delete(t.id);b.classList.remove('on');}else{chosenTags.add(t.id);b.classList.add('on');}};
+    c.appendChild(b);
+  });
+}
+
+/* name matching for applying AI picks */
+function findId(cat,name){
+  if(!name)return null;
+  const norm=s=>s.toLowerCase().replace(/[^a-z]/g,'');
+  const t=norm(name);
+  let best=null;
+  MENU[cat].forEach(it=>{const a=norm(it.n);if(a===t||a.includes(t)||t.includes(a))best=it.id;});
+  return best;
+}
+
+async function runGenie(){
+  const btn=document.getElementById('genieBtn');
+  const out=document.getElementById('genieOut');
+  const tags=['halal',...chosenTags];
+  out.classList.add('show');
+  out.innerHTML='<div class="note"><span class="spinner"></span> Pot Genie is designing your bowl…</div>';
+  btn.disabled=true;
+
+  let rec=null;
+  try{ rec=await askClaude(tags); }catch(e){ rec=null; }
+  if(!rec) rec=ruleBased([...chosenTags]);
+
+  applyRec(rec);
+  btn.disabled=false;
+
+  const picks=[];
+  if(rec.soupBases&&rec.soupBases.length)picks.push('<b>Broth:</b> '+rec.soupBases.join(' + '));
+  if(rec.setMeal)picks.push('<b>Set:</b> '+rec.setMeal);
+  if(rec.veg&&rec.veg.length)picks.push('<b>Veg:</b> '+rec.veg.join(', '));
+  if(rec.meat&&rec.meat.length)picks.push('<b>Protein:</b> '+rec.meat.join(', '));
+  if(rec.staple)picks.push('<b>Staple:</b> '+rec.staple);
+  if(rec.drink)picks.push('<b>Drink:</b> '+rec.drink);
+  out.innerHTML=`<div class="note">✦ ${rec.note||'Here is a pot tuned to your taste.'}</div><div class="picks">${picks.join('<br>')}</div>`;
+  toast('🤖','AI Pot Genie filled your order — review &amp; tweak below');
+  document.getElementById('order').scrollIntoView({behavior:'smooth'});
+}
+
+/* call Claude API (Claude-in-Claude); falls back to ruleBased on any error */
+async function askClaude(tags){
+  const list=cat=>MENU[cat].map(x=>x.n).join(', ');
+  const prompt=
+`You are HOTPOT4ME's AI Pot Genie. Design ONE personalised single-serve hotpot using ONLY items from the menu below. Everything must stay halal. Honour the diner's tags. Keep it under RM23 unless the tag "premium" is present.
+
+Diner tags: ${tags.join(', ')}
+
+MENU
+Soup bases: ${list('soups')}
+Set meals: ${MENU.sets.map(s=>s.n+(s.p?(' (RM'+s.p+')'):' (à la carte)')).join(', ')}
+Vegetables: ${list('veg')}
+Meat & seafood: ${list('meat')}
+Staple: ${list('staple')}
+Drinks: ${list('drinks')}
+Add-ons: ${list('addons')}
+
+Reply with ONLY valid JSON, no markdown, no extra text, in exactly this shape:
+{"soupBases":["..."],"setMeal":"Build your own","veg":["..."],"meat":["..."],"staple":"...","drink":"...","addons":["..."],"note":"one friendly sentence under 22 words"}
+Use 1-2 soup bases. Use exact item names from the menu. If vegetarian, leave meat empty.`;
+
+  const res=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})
+  });
+  const data=await res.json();
+  let text=(data.content||[]).map(i=>i.text||"").join("").replace(/```json|```/g,"").trim();
+  const m=text.match(/\{[\s\S]*\}/);
+  return JSON.parse(m?m[0]:text);
+}
+
+/* offline rule-based recommender (always works) */
+function ruleBased(tags){
+  const t=new Set(tags);
+  let r={soupBases:[],setMeal:'Build your own',veg:[],meat:[],staple:'',drink:'',addons:[],note:''};
+  if(t.has('vegetarian')){
+    r.soupBases=['Mushroom Soup','Tomato Soup'];r.veg=['Broccoli','Enoki Mushroom','Frozen Tofu','China Beancurd Skin'];
+    r.staple='Hand-made Noodles';r.drink='Soya Bean Milk';r.addons=['Sesame Oil','Coriander'];
+    r.note='A hearty meat-free pot — earthy mushroom broth with tofu and greens for clean protein.';
+  }else if(t.has('spicy')){
+    r.soupBases=['Mala Spicy Soup','Hot and Sour Soup'];r.meat=['Sirloin Beef Slices','Chicken Slices'];
+    r.veg=['Cabbage','King Oyster Mushroom'];r.staple='Spinach Noodles';r.drink='Soya Bean Milk';r.addons=['Chopped Chili','Garlic Paste'];
+    r.note='Numbing mala with hot-and-sour on the side — beef and chicken stand up to the heat.';
+  }else if(t.has('highprotein')){
+    r.soupBases=['Prawn Soup'];r.meat=['Sirloin Beef Slices','Chicken Slices','Scallop'];
+    r.veg=['Frozen Tofu','China Beancurd Skin'];r.staple='White Rice';r.drink='Soya Bean Milk';r.addons=['Garlic Paste'];
+    r.note='A protein-packed bowl — beef, chicken and scallop with tofu to hit your macros.';
+  }else if(t.has('lowsodium')||t.has('light')){
+    r.soupBases=['Tonic Diet Chicken Soup','Mushroom Soup'];r.meat=['Chicken Slices'];
+    r.veg=['Broccoli','Green Carol Lettuce','Enoki Mushroom'];r.staple='White Rice';r.drink='Mineral Water';r.addons=['Vinegar','Scallion'];
+    r.note='Light and low-sodium — clear tonic broth, lean chicken and crisp greens.';
+  }else if(t.has('premium')){
+    r.soupBases=['Prawn Soup','Tonic Diet Chicken Soup'];r.setMeal='Signature Wagyu Premium';r.meat=['Scallop'];
+    r.veg=['King Oyster Mushroom','Broccoli'];r.staple='Hand-made Noodles';r.drink='Tea';r.addons=['Sauce Mix'];
+    r.note='Treat yourself — wagyu set with scallop, prawn broth and our signature sauce.';
+  }else if(t.has('budget')){
+    r.soupBases=['Tomato Soup','Mushroom Soup'];r.meat=['Chicken Slices'];
+    r.veg=['Cabbage','Potato Slices','Enoki Mushroom'];r.staple='White Rice';r.drink='Mineral Water';r.addons=['Garlic Paste','Chopped Chili'];
+    r.note='Filling and friendly on the wallet — comes in well under RM23.';
+  }else{
+    r.soupBases=['Tomato Soup','Tonic Diet Chicken Soup'];r.meat=['Chicken Slices'];
+    r.veg=['Broccoli','Enoki Mushroom','Frozen Tofu'];r.staple='Spinach Noodles';r.drink='Tea';r.addons=['Garlic Paste'];
+    r.note='A balanced crowd-pleaser — half tangy tomato, half nourishing tonic chicken.';
+  }
+  return r;
+}
+
+/* apply a recommendation to the live form */
+function applyRec(rec){
+  // soups
+  state.soups.clear();
+  (rec.soupBases||[]).forEach(n=>{const id=findId('soups',n);if(id&&state.soups.size<2)state.soups.add(id);});
+  document.querySelectorAll('#soups .opt').forEach((b,i)=>b.classList.toggle('on',state.soups.has(MENU.soups[i].id)));
+  // set
+  const sid=findId('sets',rec.setMeal)||'byo';
+  state.set=sid;
+  document.querySelectorAll('#sets .set').forEach((b,i)=>b.classList.toggle('on',MENU.sets[i].id===sid));
+  // clear qty
+  ['veg','meat','staple','drinks','addons'].forEach(c=>state.qty[c]={});
+  const addQ=(cat,names)=>{(names||[]).forEach(n=>{const id=findId(cat,n);if(id)state.qty[cat][id]=(state.qty[cat][id]||0)+1;});};
+  addQ('veg',rec.veg);addQ('meat',rec.meat);
+  if(rec.staple){const id=findId('staple',rec.staple);if(id)state.qty.staple[id]=1;}
+  if(rec.drink){const id=findId('drinks',rec.drink);if(id)state.qty.drinks[id]=1;}
+  addQ('addons',rec.addons);
+  // refresh qty UI
+  ['veg','meat','staple','drinks','addons'].forEach(cat=>{
+    document.querySelectorAll('#'+(cat)+' .step-item').forEach(row=>{
+      const id=row.dataset.id, v=state.qty[cat][id]||0;
+      row.querySelector('.q').textContent=v;row.querySelector('.minus').disabled=v<=0;row.classList.toggle('has',v>0);
+    });
+  });
+  update();
+}
+
+/* ============ CHECKOUT ============ */
+const PAYMENTS=[
+  {id:'grab',t:'GrabPay',s:'Pay with your Grab wallet',pic:'<span class="grab" style="display:grid;place-items:center;width:100%;height:100%">Grab</span>',bg:'#00B14F'},
+  {id:'bank',t:'Local bank transfer',s:'FPX · Maybank, CIMB, RHB…',pic:'🏦',bg:'#EAF4FF'},
+  {id:'card',t:'Credit / debit card',s:'Visa, Mastercard',pic:'💳',bg:'#FFF1E7'},
+  {id:'points',t:'4ME Club points',s:'Members redeem reward points',pic:'⭐',bg:'#FFF8E6'},
+];
+function openCheckout(){
+  state.special=document.getElementById('special').value.trim();
+  const items=lineItems();
+  let sub=0;items.forEach(i=>sub+=i.p*i.q);const tax=sub*0.06,grand=sub+tax;
+  const m=document.getElementById('modal');
+  m.innerHTML=`
+    <div class="modal-h"><h3>Review &amp; pay</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-b">
+      <div class="order-final">
+        <div class="of"><span>Table</span><b>#${state.table}</b></div>
+        <div class="of"><span>Broth</span><b>${[...state.soups].map(id=>MENU.soups.find(s=>s.id===id).n).join(' + ')}</b></div>
+        <div class="of"><span>Items</span><b>${items.length}</b></div>
+        ${state.special?`<div class="of"><span>Note</span><b style="font-family:inherit;max-width:60%;text-align:right">${state.special.replace(/</g,'&lt;')}</b></div>`:''}
+        <div class="of"><span>Subtotal</span><b>${money(sub)}</b></div>
+        <div class="of"><span>SST 6%</span><b>${money(tax)}</b></div>
+        <div class="of grand"><span>Total</span><b>${money(grand)}</b></div>
+      </div>
+      <div style="font-weight:700;margin-bottom:12px">Payment method</div>
+      <div id="pays">${PAYMENTS.map(p=>`
+        <button class="pay" data-id="${p.id}" onclick="pickPay('${p.id}',this)">
+          <span class="pic" style="background:${p.bg}">${p.pic}</span>
+          <span><span class="pt">${p.t}</span><br><span class="ps">${p.s}</span></span>
+        </button>`).join('')}</div>
+      <button class="btn btn-primary btn-lg" id="payBtn" style="width:100%;justify-content:center;margin-top:8px" disabled onclick="placeOrder(${grand.toFixed(2)})">Place order · ${money(grand)}</button>
+      <div class="save" style="margin-top:12px">🔒 No third-party platform fees · order goes straight to your table's kitchen</div>
+    </div>`;
+  document.getElementById('overlay').classList.add('show');
+}
+function pickPay(id,btn){
+  state.payment=id;
+  document.querySelectorAll('.pay').forEach(p=>p.classList.remove('on'));btn.classList.add('on');
+  document.getElementById('payBtn').disabled=false;
+}
+function closeModal(){document.getElementById('overlay').classList.remove('show');}
+function placeOrder(grand){
+  const m=document.getElementById('modal');
+  m.innerHTML=`
+    <div class="modal-b status-wrap">
+      <div class="status-pot">🍲</div>
+      <h3>Order confirmed</h3>
+      <div class="est">Preparing · ready in ~10 min</div>
+      <div class="track">
+        <div class="tk done"><div class="d">✓</div><div class="l">Ordered</div></div>
+        <div class="tk active" id="tk2"><div class="d">🔥</div><div class="l">Heating pot</div></div>
+        <div class="tk" id="tk3"><div class="d">🍳</div><div class="l">Plating</div></div>
+        <div class="tk" id="tk4"><div class="d">🥢</div><div class="l">Served</div></div>
+      </div>
+      <div class="prog"><i id="progBar"></i></div>
+      <div class="status-meta">
+        <div class="sm"><span>Table</span><b>#${state.table}</b></div>
+        <div class="sm"><span>Smart pot</span><b>Heating to ${state.temp}°C</b></div>
+        <div class="sm"><span>Paid</span><b>${money(grand)} · ${PAYMENTS.find(p=>p.id===state.payment).t}</b></div>
+        <div class="sm"><span>Earned</span><b>+${Math.round(grand)} 4ME points ⭐</b></div>
+      </div>
+      <button class="btn btn-dark btn-lg" style="width:100%;justify-content:center;margin-top:18px" onclick="closeModal()">Done</button>
+    </div>`;
+  // animate progress
+  setTimeout(()=>document.getElementById('progBar').style.width='38%',200);
+  setTimeout(()=>{document.getElementById('progBar').style.width='66%';document.getElementById('tk2').classList.remove('active');document.getElementById('tk2').classList.add('done');document.getElementById('tk2').querySelector('.d').textContent='✓';document.getElementById('tk3').classList.add('active');},1800);
+  toast('✅','Order placed for Table '+state.table+'!');
+}
+
+/* ============ NAV: mobile menu + login ============ */
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu'), b=document.getElementById('burger');
+  const open=m.classList.toggle('open');
+  b.textContent=open?'✕':'☰';
+}
+function closeMenu(){
+  const m=document.getElementById('mobileMenu');
+  if(m){m.classList.remove('open');document.getElementById('burger').textContent='☰';}
+}
+function openLogin(mode){
+  const m=document.getElementById('modal');
+  const signup = mode==='signup';
+  m.innerHTML=`
+    <div class="modal-h"><h3>${signup?'Create account':'Welcome back'}</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-b">
+      <div class="auth-tabs">
+        <button class="${signup?'':'on'}" onclick="openLogin()">Log in</button>
+        <button class="${signup?'on':''}" onclick="openLogin('signup')">Sign up</button>
+      </div>
+      <p style="color:var(--muted);font-size:13.5px;margin-bottom:18px">4ME Club members earn points on every pot and a free lunch on their birthday. (Demo form — no real data is sent.)</p>
+      ${signup?'<label>Full name</label><input type="text" placeholder="Wong Kong Yong">':''}
+      <label>Phone or email</label>
+      <input type="text" placeholder="012-345 6789">
+      <label>Password</label>
+      <input type="password" placeholder="••••••••">
+      <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="demoLogin('${signup?'signup':'login'}')">${signup?'Create my account':'Log in'}</button>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--muted)">Or <a style="color:var(--broth);font-weight:700;cursor:pointer" onclick="closeModal();document.getElementById('member').scrollIntoView({behavior:'smooth'})">see 4ME Club perks →</a></div>
+    </div>`;
+  document.getElementById('overlay').classList.add('show');
+}
+function demoLogin(mode){
+  closeModal();
+  toast(mode==='signup'?'🎉':'👋', mode==='signup'?'Account created — welcome to the 4ME Club!':'Logged in! Your points are ready to redeem.');
+}
+
+/* ============ TOAST ============ */
+let toastTimer;
+function toast(emoji,msg){
+  document.getElementById('toastE').textContent=emoji;
+  document.getElementById('toastM').innerHTML=msg;
+  const t=document.getElementById('toast');t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* hero temp flicker */
+setInterval(()=>{const e=document.getElementById('heroTemp');if(e)e.textContent=97+Math.floor(Math.random()*3);},1400);
+
+/* ============ INIT ============ */
+renderTables();renderTags();renderSoups();renderSets();
+renderQty('veg','veg');renderQty('meat','meat');renderQty('staple','staple');renderQty('drinks','drinks');renderQty('addons','addons');
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
+
+/* make every in-page link scroll reliably + close the mobile menu */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const href=a.getAttribute('href');
+    if(href.length>1){
+      const target=document.querySelector(href);
+      if(target){e.preventDefault();closeMenu();target.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+  });
+});
+
+update();
+</script>
+</body>
+</html>
